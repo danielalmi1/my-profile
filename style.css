@@ -1,194 +1,271 @@
-/* ------------------------------------------
-   Reset
------------------------------------------- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ------------------------------------------------------------------
+   Daniel Almi — an infinite, draggable photo field with a fixed name.
+------------------------------------------------------------------ */
+
+:root {
+  --bg: #f0ede8;
+  --ink: #1a1a1a;
+  --muted: #6d6860;
+  --rule: rgba(26, 26, 26, 0.12);
 }
 
-/* ------------------------------------------
-   Body defaults
-   (defines font, color, size for the whole page)
------------------------------------------- */
-body {
-  background-color: #f0ede8;
-  color: #1a1a1a;
-  font-family: 'Inter', sans-serif;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;               /* the canvas pans; the page never scrolls */
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 300;
-  font-size: 16px;
-  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ------------------------------------------
-   Container — centers all the content
------------------------------------------- */
-.container {
-  width: 680px;
-  margin: 48px auto;
+/* ------------------------------------------------------------------
+   Stage + canvas
+   #stage catches input and fills the viewport. #canvas holds every
+   photo and is moved with a single transform, so panning stays cheap
+   no matter how many frames are on it.
+------------------------------------------------------------------ */
+#stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  cursor: grab;
+  touch-action: none;             /* we handle touch panning ourselves */
+  overscroll-behavior: none;
 }
 
-/* ------------------------------------------
-   Card — white box with shadow
------------------------------------------- */
-.card-white {
-  background: white;
-  padding: 40px 48px;
-  border-radius: 4px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  margin-bottom: 16px;
+#stage.dragging { cursor: grabbing; }
+
+/* Freeze the canvas while an overlay is up. */
+body.overlay-open #stage { pointer-events: none; }
+
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
 }
 
-/* ------------------------------------------
-   Headers
------------------------------------------- */
-h1, h2, h3 {
-  font-family: 'EB Garamond', serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+#canvas figure {
+  position: absolute;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.04);
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-h1 {
-  font-size: 2.6rem;
-  line-height: 1.2;
-  margin-bottom: 24px;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-h3 {
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  margin-top: 20px;
-  margin-bottom: 4px;
-}
-
-/* ------------------------------------------
-   Paragraphs
------------------------------------------- */
-p {
-  color: #555;
-  font-size: 0.95rem;
-  margin-bottom: 16px;
-}
-
-/* ------------------------------------------
-   Links (default)
------------------------------------------- */
-a {
-  color: #1a1a1a;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #555;
-}
-
-/* ------------------------------------------
-   Profile picture — reusable round image class
------------------------------------------- */
-.img-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+#canvas img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
-  margin-bottom: 24px;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;           /* never let the browser drag the image itself */
 }
 
-/* ------------------------------------------
-   Button — dark CTA link
------------------------------------------- */
-.btn-dark {
-  display: inline-block;
-  background-color: #1a1a1a;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 0.02em;
-  margin-top: 8px;
-  transition: background-color 0.3s ease;
+/* Only on devices with a real pointer — avoids sticky hover on touch. */
+@media (hover: hover) {
+  #canvas figure:hover { transform: scale(1.03); }
 }
 
-.btn-dark:hover {
-  background-color: #444;
-  color: white;
+/* ------------------------------------------------------------------
+   Name — pinned dead centre, photos pass beneath it
+------------------------------------------------------------------ */
+/* Sits *behind* the photo field (z-index below #stage), so frames pass
+   over it and you read the name in the gaps between them. */
+#name {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  padding: 0 20px;
 }
 
-/* ------------------------------------------
-   Reading card
------------------------------------------- */
-.reading-card {
-  display: inline-block;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 16px 24px;
-  border-radius: 4px;
-  margin-top: 8px;
+#name span {
+  position: relative;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4.4vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.005em;
+  text-align: center;
 }
 
-.reading-label {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
+/* ------------------------------------------------------------------
+   Fixed chrome — nav, socials, hint
+------------------------------------------------------------------ */
+#nav, #social, #hint {
+  position: fixed;
+  z-index: 30;
+  display: flex;
+  gap: 26px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #aaa;
-  margin-bottom: 8px;
+  /* Chrome is the only thing that always sits on top, so it has to carry
+     its own contrast over a dark photo. Stacked shadows build up a dense
+     halo without needing a visible plate. */
+  text-shadow: 0 0 5px var(--bg), 0 0 10px var(--bg), 0 0 18px var(--bg),
+               0 0 28px var(--bg), 0 0 40px var(--bg);
 }
 
-.reading-title {
-  font-family: 'EB Garamond', serif;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  padding-bottom: 1px;
+#nav { top: 0; right: 0; padding: 30px 34px; }
+#social { bottom: 0; right: 0; padding: 30px 34px; }
+#hint { bottom: 0; left: 0; padding: 30px 34px; color: var(--muted); }
+
+#nav button,
+#social a {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--muted);
+  text-decoration: none;
+  cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.reading-title:hover {
-  color: #555;
+#nav button:hover,
+#social a:hover,
+#nav button:focus-visible,
+#social a:focus-visible { color: var(--ink); }
+
+#hint {
+  transition: opacity 0.6s ease;
+  pointer-events: none;
 }
 
-/* ------------------------------------------
-   Inline list — for social links in footer
------------------------------------------- */
-.list-inline {
-  list-style: none;
-  padding-left: 0;
+#hint.gone { opacity: 0; }
+
+/* ------------------------------------------------------------------
+   Overlays — tinted scrim over the canvas
+------------------------------------------------------------------ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: rgba(240, 237, 232, 0.86);
+  backdrop-filter: blur(20px) saturate(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(1.05);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
-.list-inline > li {
-  display: inline;
-  padding: 0 20px 0 0;
+.overlay[hidden] { display: none; }
+.overlay.open { opacity: 1; }
+
+.overlay__inner {
+  max-width: 580px;
+  width: 100%;
+  transform: translateY(12px);
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.list-inline > li a {
-  color: #999;
-  font-size: 0.875rem;
+.overlay.open .overlay__inner { transform: none; }
+
+.overlay__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 30px 34px;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.list-inline > li a:hover {
-  color: #1a1a1a;
+.overlay__close:hover,
+.overlay__close:focus-visible { color: var(--ink); }
+
+.overlay h2 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: 2.1rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 22px;
 }
 
-/* ------------------------------------------
-   Responsive — smaller screens
------------------------------------------- */
-@media (max-width: 720px) {
-  .container {
-    width: 100%;
-    margin: 0;
-    padding: 16px;
-  }
+.overlay p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: #4d4d4d;
+  margin-bottom: 16px;
+}
 
-  .card-white {
-    padding: 28px 24px;
-  }
+.overlay p:last-child { margin-bottom: 0; }
+
+/* Writings list */
+.writings { list-style: none; }
+
+.writings li { border-top: 1px solid var(--rule); }
+.writings li:last-child { border-bottom: 1px solid var(--rule); }
+
+.writings a {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  transition: opacity 0.3s ease;
+}
+
+.writings a:hover { opacity: 0.55; }
+.writings a span:last-child { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+
+.writings__empty {
+  padding: 16px 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.noscript {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 80;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.8rem;
+  background: var(--bg);
+}
+
+/* ------------------------------------------------------------------
+   Small screens — tighter chrome, and the hint moves out of the way
+------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  #nav { padding: 20px 22px; gap: 20px; }
+  #social { padding: 20px 22px; gap: 20px; }
+  /* No room for it beside the social links, and "drag" is desktop
+     language anyway — the gesture is obvious on a touchscreen. */
+  #hint { display: none; }
+  .overlay__close { padding: 20px 22px; }
+  #nav, #social, #hint, .overlay__close { font-size: 0.66rem; letter-spacing: 0.12em; }
+  .overlay h2 { font-size: 1.7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #canvas figure,
+  .overlay,
+  .overlay__inner,
+  #hint { transition: none; }
 }

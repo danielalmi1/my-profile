@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Almi</title>
+    <meta name="description" content="Daniel Almi — Helsinki. Building Null Fellows.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,60 +12,55 @@
   </head>
   <body>
 
-    <div class="container">
-
-      <div class="card-white">
-        <h1>Hey, I'm Daniel 👋</h1>
-        <img src="daniel profile pic copy.png" alt="Daniel Almi" class="img-circle">
-        <p>I'm a Finance + Engineering Psychology student from Finland, currently building
-        Null Fellows to bring together exceptional young talent and the fastest growing
-        startups in Europe.</p>
-        <a href="https://nullfellows.com" target="_blank" class="btn-dark">Null Fellows →</a>
-      </div>
-
-      <div class="card-white">
-        <h2>Projects</h2>
-
-        <h3>Null Fellows</h3>
-        <p>Connecting the world's brightest young people with the best startups in Europe.</p>
-
-        <h3>Junction</h3>
-        <p>World's largest AI hackathon.</p>
-
-        <h3>Aalto Running Club</h3>
-        <p>Finland's leading run club with 3000+ members, hosting weekly events and an annual marathon.</p>
-      </div>
-
-      <div class="card-white">
-        <h2>Travels</h2>
-        <p>I love travelling and exploring new places.</p>
-        <a href="travels.html" class="btn-dark">See my travels page →</a>
-      </div>
-
-      <div class="card-white">
-        <h2>Wisdom</h2>
-        <p>I'm always on the lookout for new stuff to learn and read.</p>
-        <div class="reading-card">
-          <span class="reading-label">Reading now</span>
-          <a href="https://www.goodreads.com/book/show/27212405-powerhouse" target="_blank" class="reading-title">
-            Powerhouse — James Andrew Miller
-          </a>
-        </div>
-      </div>
-
-      <div class="card-white">
-        <h2>Find me</h2>
-        <ul class="list-inline">
-          <li>
-            <a href="https://linkedin.com/in/danielalmi" target="_blank">LinkedIn</a>
-          </li>
-          <li>
-            <a href="https://instagram.com/danielalmi/" target="_blank">Instagram</a>
-          </li>
-        </ul>
-      </div>
-
+    <!-- The draggable photo field. Populated by canvas.js. -->
+    <div id="stage" aria-label="Photo collage, drag to explore">
+      <div id="canvas"></div>
     </div>
 
+    <h1 id="name"><span>Daniel Almi</span></h1>
+
+    <nav id="nav">
+      <button type="button" data-overlay="about">About</button>
+      <button type="button" data-overlay="writings">Writings</button>
+    </nav>
+
+    <div id="social">
+      <a href="https://linkedin.com/in/danielalmi" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://instagram.com/danielalmi/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+
+    <p id="hint" aria-hidden="true">Drag to explore</p>
+
+    <!-- Overlays -->
+    <div class="overlay" id="about" role="dialog" aria-modal="true" aria-labelledby="about-t" hidden>
+      <button type="button" class="overlay__close" aria-label="Close">Close</button>
+      <div class="overlay__inner">
+        <h2 id="about-t">About</h2>
+        <p>I'm Daniel — a Finance and Engineering Psychology student in Helsinki, currently
+        building Null Fellows to connect exceptional young people with the fastest-growing
+        startups in Europe.</p>
+        <p>Most of what you see here is from the last few years: mountains, cities, long
+        lunches, and the odd detour. I take a camera most places I go.</p>
+      </div>
+    </div>
+
+    <div class="overlay" id="writings" role="dialog" aria-modal="true" aria-labelledby="writings-t" hidden>
+      <button type="button" class="overlay__close" aria-label="Close">Close</button>
+      <div class="overlay__inner">
+        <h2 id="writings-t">Writings</h2>
+        <!-- Add pieces as list items:
+             <li><a href="URL" target="_blank" rel="noopener"><span>Title</span><span>2026</span></a></li> -->
+        <ul class="writings">
+          <li class="writings__empty">Nothing published yet.</li>
+        </ul>
+      </div>
+    </div>
+
+    <noscript>
+      <div class="noscript">Enable JavaScript to explore the photo collage.</div>
+    </noscript>
+
+    <script src="photos.js"></script>
+    <script src="canvas.js"></script>
   </body>
 </html>
