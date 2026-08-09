@@ -223,7 +223,7 @@
   var KEYS = { ArrowLeft: [110, 0], ArrowRight: [-110, 0], ArrowUp: [0, 110], ArrowDown: [0, -110] };
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { closeOverlay(); return; }
+    if (e.key === 'Escape') { escapeOverlay(); return; }
     if (document.body.classList.contains('overlay-open')) return;
     var k = KEYS[e.key];
     if (!k) return;
@@ -240,6 +240,36 @@
   var lastFocus = null;
   var closeTimer = null;
 
+  var writings = document.getElementById('writings');
+  var backBtn = writings ? writings.querySelector('.overlay__back') : null;
+
+  function scroller(el) { return el.querySelector('.overlay__scroll'); }
+
+  /* Writings holds two views in one overlay: the index and a piece.
+     The back arrow moves between them without closing. */
+  function pieceOpen() {
+    return !!(writings && !writings.hidden &&
+              writings.querySelector('[data-view="piece"]:not([hidden])'));
+  }
+
+  function showPiece(id) {
+    var piece = document.getElementById('piece-' + id);
+    if (!piece) return;
+    writings.querySelector('[data-view="index"]').hidden = true;
+    piece.hidden = false;
+    backBtn.hidden = false;
+    scroller(writings).scrollTop = 0;
+    backBtn.focus();
+  }
+
+  function showIndex() {
+    var pieces = writings.querySelectorAll('[data-view="piece"]');
+    for (var i = 0; i < pieces.length; i++) pieces[i].hidden = true;
+    writings.querySelector('[data-view="index"]').hidden = false;
+    backBtn.hidden = true;
+    scroller(writings).scrollTop = 0;
+  }
+
   function openOverlay(id) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -247,7 +277,12 @@
 
     lastFocus = document.activeElement;
     current = el;
+    // Always open on the index. Doing this here rather than on close
+    // means reopening mid-fade can't land you back inside a piece.
+    if (el === writings) showIndex();
     el.hidden = false;
+    var sc = scroller(el);
+    if (sc) sc.scrollTop = 0;
     document.body.classList.add('overlay-open');
     // Let the browser register the un-hidden element before transitioning.
     requestAnimationFrame(function () { el.classList.add('open'); });
@@ -262,26 +297,45 @@
     current = null;
     el.classList.remove('open');
     document.body.classList.remove('overlay-open');
-    closeTimer = setTimeout(function () { el.hidden = true; closeTimer = null; }, 400);
+    closeTimer = setTimeout(function () {
+      el.hidden = true;
+      closeTimer = null;
+    }, 400);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
     lastFocus = null;
+  }
+
+  // Escape backs out one level at a time: piece -> index -> closed.
+  function escapeOverlay() {
+    if (pieceOpen()) showIndex();
+    else closeOverlay();
   }
 
   document.querySelectorAll('[data-overlay]').forEach(function (btn) {
     btn.addEventListener('click', function () { openOverlay(btn.dataset.overlay); });
   });
 
+  document.querySelectorAll('[data-piece]').forEach(function (btn) {
+    btn.addEventListener('click', function () { showPiece(btn.dataset.piece); });
+  });
+
+  if (backBtn) backBtn.addEventListener('click', showIndex);
+
   document.querySelectorAll('.overlay').forEach(function (el) {
     el.addEventListener('click', function (e) {
-      // Click the scrim (or the close button) to dismiss.
-      if (e.target === el || e.target.classList.contains('overlay__close')) closeOverlay();
+      if (e.target.classList.contains('overlay__close')) { closeOverlay(); return; }
+      // Clicking the empty margin dismisses — except while reading a
+      // piece, where a stray click shouldn't throw away your place.
+      if (pieceOpen()) return;
+      if (e.target === el || e.target.classList.contains('overlay__scroll')) closeOverlay();
     });
   });
 
   // Keep tabbing inside an open overlay.
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Tab' || !current) return;
-    var focusable = current.querySelectorAll('button, a[href]');
+    var focusable = [].slice.call(current.querySelectorAll('button, a[href]'))
+      .filter(function (n) { return n.offsetParent !== null; });
     if (!focusable.length) return;
     var first = focusable[0];
     var last = focusable[focusable.length - 1];

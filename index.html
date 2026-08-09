@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Almi</title>
-    <meta name="description" content="Daniel Almi — Helsinki. Building Null Fellows.">
+    <meta name="description" content="Daniel Almi — helping extraordinary young individuals achieve out-of-distribution success at Null Fellows.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -31,28 +31,161 @@
 
     <p id="hint" aria-hidden="true">Drag to explore</p>
 
-    <!-- Overlays -->
+    <!-- ---------------------------------------------------------------
+         About
+    ---------------------------------------------------------------- -->
     <div class="overlay" id="about" role="dialog" aria-modal="true" aria-labelledby="about-t" hidden>
       <button type="button" class="overlay__close" aria-label="Close">Close</button>
-      <div class="overlay__inner">
-        <h2 id="about-t">About</h2>
-        <p>I'm Daniel — a Finance and Engineering Psychology student in Helsinki, currently
-        building Null Fellows to connect exceptional young people with the fastest-growing
-        startups in Europe.</p>
-        <p>Most of what you see here is from the last few years: mountains, cities, long
-        lunches, and the odd detour. I take a camera most places I go.</p>
+      <div class="overlay__scroll">
+        <div class="overlay__inner">
+          <h2 id="about-t">About</h2>
+          <p>Helping extraordinary young individuals achieve out-of-distribution success at
+          <a href="https://nullfellows.com" target="_blank" rel="noopener">null fellows</a>.</p>
+        </div>
       </div>
     </div>
 
+    <!-- ---------------------------------------------------------------
+         Writings — two views in one overlay: the index, and a piece.
+         The back arrow returns to the index without closing.
+    ---------------------------------------------------------------- -->
     <div class="overlay" id="writings" role="dialog" aria-modal="true" aria-labelledby="writings-t" hidden>
+      <button type="button" class="overlay__back" aria-label="Back to writings" hidden>&larr; Back</button>
       <button type="button" class="overlay__close" aria-label="Close">Close</button>
-      <div class="overlay__inner">
-        <h2 id="writings-t">Writings</h2>
-        <!-- Add pieces as list items:
-             <li><a href="URL" target="_blank" rel="noopener"><span>Title</span><span>2026</span></a></li> -->
-        <ul class="writings">
-          <li class="writings__empty">Nothing published yet.</li>
-        </ul>
+
+      <div class="overlay__scroll">
+
+        <div class="overlay__inner" data-view="index">
+          <h2 id="writings-t">Writings</h2>
+          <ul class="writings">
+            <li>
+              <button type="button" data-piece="eagles">on eagles, techno clubs, and lost einsteins</button>
+            </li>
+          </ul>
+          <p class="writings__more">More coming soon</p>
+        </div>
+
+        <article class="overlay__inner" data-view="piece" id="piece-eagles" hidden>
+          <h2>on eagles, techno clubs, and lost einsteins</h2>
+
+          <h3>The bird that never looked up</h3>
+          <p>Around 1925, a Ghanaian teacher named James Aggrey told a story that has outlived most of what else was said that decade.</p>
+          <p>A farmer found an eagle chick and raised it in his yard with the chickens. It ate what the chickens ate. It walked how the chickens walked. It stayed at ground level because that was where the feed was, and it never once looked up.</p>
+          <p>Years later a naturalist visited and said: that is an eagle. The farmer disagreed. It has lived as a chicken its whole life, he said. It has never done anything else. So they tested it. Twice the naturalist lifted the bird and let go, and twice it dropped back down to the grain.</p>
+          <p>On the third morning he carried it up the mountain before dawn, turned it toward the rising sun, and it opened its wings and flew.</p>
+          <p>The bird did not become an eagle on the mountain. It was an eagle the entire time. It was an eagle while it was pecking grain in the dirt, and every single person who walked past that yard for years saw a chicken.</p>
+          <p>That is the part people miss. The tragedy is not the bird. The bird exists. The bird exists in every country in Europe, right now, in numbers that would embarrass us if we could count them.</p>
+          <p>The tragedy is that almost nobody carries it up the mountain.</p>
+
+          <h3>The power law</h3>
+          <p>We are living through the fastest period of technological change in history. That much is obvious.</p>
+          <p>What is less obvious is that this change is not produced collectively. It is produced by a startlingly small number of individuals, under a power law so steep that the top of the distribution rewrites the world and the middle barely registers.</p>
+          <p>And the assumption about those individuals is wrong. People picture senior professionals. Tenured academics. Operators with twenty years of pattern recognition.</p>
+          <p>They are almost never that. They are young — usually absurdly young — and they combine unreasonable raw capability with something far less discussed: unreasonable access.</p>
+
+          <h3>Right time</h3>
+          <p>The Altair 8800 shipped in January 1975.</p>
+          <p>Bill Gates was nineteen. Steve Jobs was nineteen. Paul Allen was twenty-two. Bill Joy was twenty. Eric Schmidt was nineteen. Steve Ballmer was eighteen.</p>
+          <p>This is not a coincidence and it is not a mystery but rather arithmetic. Be five years older and you already have a career, a mortgage, and a professional identity built on the previous paradigm. Be five years younger and the window has closed before you can reach it. There is a narrow band — old enough to build, young enough to have nothing to protect — and if you are not in it, effort does not substitute.</p>
+          <p>We believe that the band is open again, and that it currently sits somewhere between fifteen and twenty-five.</p>
+          <p>The evidence is already visible. Scale, Cursor, Mercor — companies now measured in the tens of billions, run by people who were not old enough to rent a car when they started. AI is producing young fortunes at a rate the world has never seen.</p>
+          <p>Note where all of them are. That matters, and we will come back to it.</p>
+
+          <h3>Right room</h3>
+          <p>Timing is only half of it.</p>
+          <p>Steve Jobs called Bill Hewlett at home when he was twelve to ask for parts for a frequency counter. He got the parts and a summer job. He grew up walking distance from the engineers building the thing he would eventually sell to the world.</p>
+          <p>Bill Gates went to a school whose mothers' club bought a computer terminal in 1968, when almost no adult in the country had touched one. By twenty he had accumulated more programming hours than nearly anyone alive.</p>
+          <p>Neither man invented his own access. Both were handed a doorway, early, by an accident of geography and enrolment. What they did with it was extraordinary. That they were standing in front of it at all was luck.</p>
+          <p>Almost every profile of these people is written about the first part. Almost none is written about the second.</p>
+
+          <h3>The question nobody asks</h3>
+          <p>Here is the question that follows, and it is the only interesting one:</p>
+          <p>How many of them did we miss?</p>
+          <p>Raj Chetty and his co-authors answered a version of it. Using millions of patent and tax records, they found that American children born into top-1% households are roughly ten times more likely to become inventors than children born below the median — and that the gap is not explained by ability. Early test scores predict invention. Family income predicts it independently, and it keeps predicting it long after the scores stop mattering.</p>
+          <p>They called the people on the wrong side of that gap the Lost Einsteins, and they estimated that closing it would produce four times as many inventors than the US has today.</p>
+          <p>Now the harder study, and the one that should worry Europe more.</p>
+          <p>Aghion, Akcigit, Hyytinen and Toivanen ran the same question on Finland — merging patent data, income data, and military IQ records into one of the cleanest datasets in social science. Finland is the strongest possible test case: free university, negligible tuition, one of the most equal societies on earth. If money is the barrier, Finland is where the effect should vanish.</p>
+          <p>It does not vanish. Ability explains the largest share, as it should. But parental education and background still move the outcome after controlling for measured ability, in the country most engineered to prevent exactly that.</p>
+          <p>Read that result properly and it is not a story about money at all. Finland already removed the money. What it could not distribute was exposure — knowing that the thing exists, meeting someone who does it, understanding that a person like you is allowed.</p>
+          <p>You cannot subsidise your way to that. It is not a funding problem. It has never been a funding problem.</p>
+
+          <h3>Europe</h3>
+          <p>The US has this problem and produces its lost Einsteins anyway, at scale, because its top of funnel is enormous and its density is extreme.</p>
+          <p>Europe has the same problem and does not have the compensating machine. Not because Europe lacks capital, universities, or engineers. It has all three, in quantity.</p>
+          <p>What it lacks is concentration. The observation that should bother you is the one from three paragraphs ago.</p>
+          <p>Every AI fortune of the last three years was made by someone who was already inside two or three buildings in Cambridge, Massachusetts and the Bay Area. Not a country. A handful of buildings.</p>
+          <p>That is not a counterexample to our argument. That is our argument. The pipeline still runs through a small number of rooms, and none of them are here.</p>
+          <p>The talent is here. It is in Tallinn and Porto and Kraków and Aarhus, and it is currently optimising for a graduate scheme because that is the highest-status thing anyone in its vicinity has ever described.</p>
+          <p>The problem isn't talent. It's density.</p>
+
+          <h3>Including ours</h3>
+          <p>We should be honest about the shape of this argument, because we have just spent a thousand words criticising people for not seeing selection bias.</p>
+          <p>Everyone we have named — Jobs, Gates, Wang, the founders of Cursor and Mercor — is someone it worked out for. We have no list of the ones it did not work out for. Nobody does. That is the entire nature of the problem, and it means this document is a conviction, not a proof.</p>
+          <p>We are comfortable with that. Every position worth taking early is a conviction. If it were provable, it would already be priced.</p>
+
+          <h3>Selection &amp; talent</h3>
+          <p>None of this is a capability problem. Europe knows how to find people and Europe knows how to build rooms. It simply does both for football and nightlife and neither for the people who will build the next decade's companies.</p>
+          <p>Out of all countries in Europe who do it well (there are many), let's look at Germany:</p>
+
+          <h3>The net</h3>
+          <p>At Euro 2000, Germany went out in the group stage with one point. It was the worst tournament the country had ever had, and the response was not a new manager.</p>
+          <p>In 2002 the DFB and the league launched what became the Extended Talent Promotion Programme. They built 366 regional coaching bases across the country and paid over a thousand coaches to run them, so that no eleven-year-old in Germany was more than an hour from a proper session. They built 52 elite centres on top. And they made academies a licensing condition — every professional club had to run one, staff it, and field a specified number of nationally eligible youth players, or lose its licence. Around €48 million a year, from a standing start, aimed entirely at children.</p>
+          <p>The man who ran it, Jörg Daniel, described the goal in one sentence: "If the talent of the century happens to be born in a tiny village behind the mountains, from now on we will find him."</p>
+          <p>Twelve years later Germany won the World Cup with a squad that had come almost entirely through that system.</p>
+          <p>That is the answer to the fragmented-continent objection. Europe's scouting problem is not unsolvable. It is solved, routinely, for football. Germany rebuilt a national talent pipeline in a decade because it decided that missing one player in a village was unacceptable.</p>
+          <p>We miss those people constantly, and we have never once built the net.</p>
+
+          <h3>The door</h3>
+          <p>Two hundred miles away in Berlin there is a building with one of the best sound systems in the world, and nobody has ever queued four hours in the cold for a sound system.</p>
+          <p>What Berghain actually sells is the room, and the room is entirely a product of the door.</p>
+          <p>Sven Marquardt has run that door for over twenty years and does not describe the job as security. He describes it as curating a crowd. There is no published rubric — deliberately, because a rubric you can prepare for is a rubric that stops working. He does not let his team select until they understand what the place actually is. He is not ranking people. He is composing a room. His word for what he is protecting is friction: a room where everyone is the same is a dead room, no matter how good each individual in it is.</p>
+          <p>These are two different crafts, and both are necessary.</p>
+          <p>A net without a door gives you a very large, very average pool. A door without a net gives you exquisite taste applied to whoever happened to turn up. Germany, of all places, has demonstrated both at world-class level — the most systematic talent search in European sport and the most deliberate room in European culture — and applies neither to the thing that actually compounds.</p>
+          <p>That is what { } is. The net and the door. Go looking in the village, then compose the room.</p>
+          <p>One consequence of the door we should say out loud. Most people who read this will apply, and most will not get in. At Berghain, being turned away usually means the room already has ten of you tonight — it is a composition decision, not a verdict on your worth. Ours works the same way. We would rather tell you that than let you conclude something false about yourself.</p>
+          <p>Because every legible selection system Europe has built converges on the same output: the people who were already legible. Credentials are a lagging indicator. By the time the institutions agree that someone is exceptional, the interesting part has happened somewhere else.</p>
+
+          <h3>Martians, a dozen Nobels, and a video call</h3>
+
+          <h4>Budapest</h4>
+          <p>Von Kármán, Szilárd, Wigner, von Neumann, Teller. Between them: aerodynamics, the nuclear chain reaction, quantum mechanics, game theory, the architecture of every computer you have ever used. Each of them was Hungarian, born within a few streets and a few years of each other. Their American colleagues found this so improbable they made a joke of it: when someone asked Szilárd why, if aliens existed, we had never met one, he answered that they were already here and calling themselves Hungarians.</p>
+          <p>The Martians were not an accident of national genius. They were the output of a machine that a few people built on purpose.</p>
+          <p>Hungary started a national mathematics competition for schoolchildren in 1894, and a journal that printed hard problems and published the names of the students who solved them — so a boy in a provincial town could be discovered by a magazine. Wigner, von Neumann, Teller and later a Nobel economist all passed through one school, the Fasori Gimnázium, where a maths teacher called László Rátz identified von Neumann at around eleven, arranged university tutoring for him, and refused to be paid for it. He handed Wigner books.</p>
+          <p>A national net that could find a child in a small town, and a teacher with the judgement to know what he was looking at. That is the entire formula, running in Central Europe over a century ago.</p>
+
+          <h4>Cambridge</h4>
+          <p>Max Perutz ran the MRC Laboratory of Molecular Biology, and the scientists in that one building went on to collect something like a dozen Nobel Prizes. DNA came out of it. So did sequencing, and monoclonal antibodies.</p>
+          <p>Perutz's administrative approach was described by a colleague in one sentence: no politics, no committees, no reports, no referees, no interviews — just highly motivated people picked by a few people of good judgement. Perutz himself put it as: creativity cannot be organised; well-run labs can foster it, but hierarchy and paperwork will kill it.</p>
+          <p>He built a canteen and made everyone eat in it. Crick and Brenner shared an office for twenty years. That was the strategy.</p>
+
+          <h4>Tallinn</h4>
+          <p>In 1996 Estonia — newly independent, poor, 1.3 million people — decided to put computers and an internet connection into every school in the country. It was called Tiger Leap. It was, in effect, a net.</p>
+          <p>Seven years later, Skype was built in Tallinn by Estonian engineers. Microsoft eventually paid $8.5 billion for it. But the number that matters is not the exit — it is what the people inside did next. Skype's first employees and engineers went on to build Wise, Starship, Bolt, and to back DeepMind. One company turned a country with the population of Munich into one of the densest producers of technology companies per head on earth.</p>
+          <p>They did not each independently become ambitious. They sat next to each other.</p>
+
+          <h3>What {} stands for</h3>
+          <p><strong>Talent first.</strong> Before sector, before thesis, before whatever this year's narrative is. We start with people and trust them to find the problems. No fixed structure - we get to know you first, then help in whatever way actually makes sense.</p>
+          <p><strong>Slope over credential.</strong> Rate of change beats current position. We are not anti-credential. We are pre-credential. We look for outlier builders before the path is obvious. We go long on non-linear journeys.</p>
+          <p><strong>Exposure is the scarce input.</strong> Not money, not intelligence, not work ethic. Knowing the thing exists, and knowing you are allowed.</p>
+          <p><strong>The room is the product.</strong> Not the curriculum, not the capital, not the logo. Who is sitting next to you for the next ten years.</p>
+          <p><strong>Friction, deliberately.</strong> We are composing a cohort, not filling a leaderboard. A room of identical excellent people is a dead room.</p>
+          <p><strong>We select for what someone will be, not what they have done.</strong> At fifteen there is nothing to underwrite. That is the point. Null. Zero. Before there is anything to see, someone has to see it anyway.</p>
+          <p><strong>A wrong yes costs one place.</strong> A wrong no costs a life's work and you never find out. So we run looser than is comfortable, and we accept being wrong in public rather than being cautious in private.</p>
+          <p><strong>Decades, not cycles.</strong> We will know these people longer than most people know their colleagues. The right introduction at nineteen compounds for forty years.</p>
+
+          <h3>What we offer</h3>
+          <p>Three things, and we will not pretend it is more than three.</p>
+          <p><strong>Peers.</strong> A hand-picked group of people who make your current ambition look small. This is the one that changes lives and it is the one nobody can buy.</p>
+          <p><strong>Access.</strong> Time inside the fastest-moving companies in the world, watching what world-class execution actually looks like from close enough to copy it.</p>
+          <p><strong>Capital and cover, when you are ready.</strong> Warm introductions, honest advice, and the first check from people who knew you before there was anything to invest in.</p>
+          <p>That is the mountain: we do not make anybody fly, as we have never met anyone who needed us to.</p>
+
+          <h3>Our life's work</h3>
+          <p>There is an eagle in a henhouse somewhere in Europe right now, doing extremely well at something that does not matter, because nothing in its environment has ever suggested there is anything else available.</p>
+          <p>It will be fine. That is the worst part. It will have a good career, and a reasonable life, and nobody will ever write the counterfactual, and the thing it was actually capable of will simply never exist.</p>
+          <p>We built { } to find the eagles, and let them fly.</p>
+        </article>
+
       </div>
     </div>
 

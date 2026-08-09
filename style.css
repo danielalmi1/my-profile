@@ -153,9 +153,6 @@ body.overlay-open #stage { pointer-events: none; }
   position: fixed;
   inset: 0;
   z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: 28px;
   background: rgba(240, 237, 232, 0.86);
   backdrop-filter: blur(20px) saturate(1.05);
   -webkit-backdrop-filter: blur(20px) saturate(1.05);
@@ -166,19 +163,35 @@ body.overlay-open #stage { pointer-events: none; }
 .overlay[hidden] { display: none; }
 .overlay.open { opacity: 1; }
 
+/* The scroller is this inner layer, not .overlay itself, so the close
+   and back buttons can sit above it without scrolling away. */
+.overlay__scroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  padding: 96px 28px 84px;
+}
+
+/* margin:auto centres short content and, unlike flex/grid centring,
+   doesn't clip the top of content taller than the viewport. */
 .overlay__inner {
-  max-width: 580px;
+  margin: auto;
   width: 100%;
+  max-width: 600px;
   transform: translateY(12px);
   transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+.overlay__inner[hidden] { display: none; }
 .overlay.open .overlay__inner { transform: none; }
 
-.overlay__close {
+.overlay__close,
+.overlay__back {
   position: absolute;
   top: 0;
-  right: 0;
+  z-index: 2;
   padding: 30px 34px;
   background: none;
   border: 0;
@@ -190,17 +203,45 @@ body.overlay-open #stage { pointer-events: none; }
   color: var(--muted);
   cursor: pointer;
   transition: color 0.3s ease;
+  text-shadow: 0 0 8px var(--bg), 0 0 16px var(--bg), 0 0 26px var(--bg);
 }
 
+.overlay__close { right: 0; }
+.overlay__back { left: 0; }
+.overlay__back[hidden] { display: none; }
+
 .overlay__close:hover,
-.overlay__close:focus-visible { color: var(--ink); }
+.overlay__close:focus-visible,
+.overlay__back:hover,
+.overlay__back:focus-visible { color: var(--ink); }
 
 .overlay h2 {
   font-family: 'EB Garamond', Georgia, serif;
   font-weight: 400;
   font-size: 2.1rem;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   margin-bottom: 22px;
+}
+
+.overlay h3 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: 1.42rem;
+  letter-spacing: -0.005em;
+  margin: 44px 0 14px;
+}
+
+.overlay h3:first-of-type { margin-top: 28px; }
+
+.overlay h4 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 32px 0 12px;
 }
 
 .overlay p {
@@ -212,30 +253,45 @@ body.overlay-open #stage { pointer-events: none; }
 
 .overlay p:last-child { margin-bottom: 0; }
 
-/* Writings list */
+.overlay strong { font-weight: 500; color: var(--ink); }
+
+.overlay a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.3);
+  transition: opacity 0.3s ease;
+}
+
+.overlay a:hover { opacity: 0.55; }
+
+/* Writings index */
 .writings { list-style: none; }
 
 .writings li { border-top: 1px solid var(--rule); }
 .writings li:last-child { border-bottom: 1px solid var(--rule); }
 
-.writings a {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 16px 0;
-  color: var(--ink);
-  text-decoration: none;
+.writings button {
+  display: block;
+  width: 100%;
+  padding: 18px 0;
+  background: none;
+  border: 0;
+  text-align: left;
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: var(--ink);
+  cursor: pointer;
   transition: opacity 0.3s ease;
 }
 
-.writings a:hover { opacity: 0.55; }
-.writings a span:last-child { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+.writings button:hover,
+.writings button:focus-visible { opacity: 0.55; }
 
-.writings__empty {
-  padding: 16px 0;
-  font-size: 0.95rem;
+.writings__more {
+  margin-top: 20px;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
   color: var(--muted);
 }
 
@@ -258,9 +314,12 @@ body.overlay-open #stage { pointer-events: none; }
   /* No room for it beside the social links, and "drag" is desktop
      language anyway — the gesture is obvious on a touchscreen. */
   #hint { display: none; }
-  .overlay__close { padding: 20px 22px; }
-  #nav, #social, #hint, .overlay__close { font-size: 0.66rem; letter-spacing: 0.12em; }
+  .overlay__close,
+  .overlay__back { padding: 20px 22px; }
+  .overlay__scroll { padding: 74px 22px 60px; }
+  #nav, #social, .overlay__close, .overlay__back { font-size: 0.66rem; letter-spacing: 0.12em; }
   .overlay h2 { font-size: 1.7rem; }
+  .overlay h3 { font-size: 1.28rem; margin-top: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
